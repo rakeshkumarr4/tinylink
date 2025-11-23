@@ -1,12 +1,19 @@
 import prisma from '@/lib/prisma';
 
 export default async function StatsPage() {
-  const links = await prisma.link.findMany({
+  type LinkRow = { shortcode: string; timesAccessed: number | null | undefined };
+  const links: LinkRow[] = await prisma.link.findMany({
     orderBy: { timesAccessed: 'desc' },
     select: { shortcode: true, timesAccessed: true },
   });
 
-  const max = links.reduce((m, l) => Math.max(m, l.timesAccessed ?? 0), 0) || 1;
+  type NormalizedLink = { shortcode: string; timesAccessed: number };
+  const normalized: NormalizedLink[] = links.map((l) => ({
+    shortcode: l.shortcode,
+    timesAccessed: Number(l.timesAccessed ?? 0),
+  }));
+
+  const max = normalized.reduce((m, l) => Math.max(m, l.timesAccessed), 0) || 1;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-50 dark:bg-black p-8">
@@ -16,7 +23,7 @@ export default async function StatsPage() {
           <p className="text-sm text-zinc-500">No links to show.</p>
         ) : (
           <div className="space-y-3">
-            {links.map((link) => {
+            {normalized.map((link) => {
               const pct = Math.round(((link.timesAccessed ?? 0) / max) * 100);
               return (
                 <div key={link.shortcode} className="flex items-center gap-4">
