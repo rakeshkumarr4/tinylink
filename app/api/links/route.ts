@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
         return NextResponse.json(newLink);
     } catch (err: any) {
-        if (err?.code === 'P2002' || (err instanceof Prisma?.PrismaClientKnownRequestError && err.code === 'P2002')) {
+            if (err?.code === 'P2002') {
             return NextResponse.json({ error: 'Shortcode already exists' }, { status: 409 });
         }
         throw err;
