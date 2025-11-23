@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // Optional: set a shadow database for safe migrations against a remote DB
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Link {
+  id              Int    @id @default(autoincrement())
+  shortcode       String @unique
+  longUrl         String
+  timesAccessed   Int    @default(0)
+  lastAccessed    DateTime?
+  createdAt       DateTime @default(now())
+}
