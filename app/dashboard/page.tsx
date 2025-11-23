@@ -160,7 +160,7 @@ export default function Dashboard() {
                                     </a>
                                     <div className="text-xs text-zinc-500">
                                         <a href={`/${link.shortcode}`} target="_blank" rel="noreferrer" className="text-xs text-zinc-500">
-                                            {`tinyurl/${link.shortcode}`}
+                                            {`https://tinylink-lovat.vercel.app/${link.shortcode}`}
                                         </a>
                                     </div>
                                 </div>
